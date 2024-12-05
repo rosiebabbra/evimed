@@ -21,6 +21,9 @@ jobs:
         with:
           flutter-version: '3.3.4'  # Update to the version that includes the required Dart SDK
 
+      - name: Flutter upgrade
+        run: flutter upgrade
+
       # Step 3: Install Flutter dependencies
       - name: Install dependencies
         run: flutter pub get
