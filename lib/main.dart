@@ -6,8 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load();
-  print(dotenv.env);
+  await dotenv.load(fileName: "assets/.env");
   await Firebase.initializeApp(
     options: FirebaseOptions(
       apiKey: dotenv.env['API_KEY']!,
@@ -147,19 +146,20 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 35),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(width: 25),
                 const Text(
                   'Conditions',
                   style: TextStyle(fontSize: 24),
                 ),
-                const SizedBox(width: 5),
+                const SizedBox(width: 15),
                 Text(
                   filteredData.isNotEmpty
                       ? filteredData.length.toString()
                       : '50',
                   style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.w200),
+                      fontSize: 22, fontWeight: FontWeight.w100),
                 )
               ],
             ),
