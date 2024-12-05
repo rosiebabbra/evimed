@@ -15,17 +15,21 @@ jobs:
       # Step 1: Checkout the repository
       - uses: actions/checkout@v3
 
-      # Step 2: Set up Flutter environment
+      # Step 2: Set up Flutter environment (install a specific version)
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.3.4'  # Specify the version you need, or use 'latest'
+          flutter-version: '3.3.4'  # Update to the version that includes the required Dart SDK
 
-      # Step 3: Run Flutter clean and build
+      # Step 3: Install Flutter dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Step 4: Build Flutter web app
       - name: Build Flutter web app
         run: flutter clean && flutter build web
 
-      # Step 4: Deploy to Firebase Hosting
+      # Step 5: Deploy to Firebase Hosting
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
