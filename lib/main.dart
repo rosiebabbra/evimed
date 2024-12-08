@@ -66,9 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
   List<QueryDocumentSnapshot> allData = [];
   List<QueryDocumentSnapshot> filteredData = [];
   var colors = [
-    Color.fromARGB(255, 145, 214, 236),
-    Color.fromARGB(255, 228, 167, 228),
-    Color(0xFF90EE90)
+    const Color.fromARGB(255, 145, 214, 236),
+    const Color.fromARGB(255, 228, 167, 228),
+    const Color(0xFF90EE90)
   ];
 
   void updateResults(String query) {
@@ -101,55 +101,65 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                TextButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.black)),
-                    child: const Text(
-                      'Home',
-                      style: TextStyle(fontSize: 16),
-                    )),
-                TextButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.black)),
-                    child: const Text(
-                      'About',
-                      style: TextStyle(fontSize: 16),
-                    )),
-                TextButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.black)),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(fontSize: 16),
-                    )),
-                const SizedBox(width: 5),
-                TextButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromARGB(255, 253, 165, 195)),
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.black)),
-                    child: const Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    )),
-                const SizedBox(width: 35)
-              ]),
+              MediaQuery.sizeOf(context).width >= 680
+                  ? Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                      TextButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                              foregroundColor:
+                                  MaterialStateProperty.all(Colors.black)),
+                          child: const Text(
+                            'Home',
+                            style: TextStyle(fontSize: 16),
+                          )),
+                      TextButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                              foregroundColor:
+                                  MaterialStateProperty.all(Colors.black)),
+                          child: const Text(
+                            'About',
+                            style: TextStyle(fontSize: 16),
+                          )),
+                      TextButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                              foregroundColor:
+                                  MaterialStateProperty.all(Colors.black)),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(fontSize: 16),
+                          )),
+                      const SizedBox(width: 5),
+                      TextButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color.fromARGB(255, 253, 165, 195)),
+                              foregroundColor:
+                                  MaterialStateProperty.all(Colors.black)),
+                          child: const Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Text(
+                              'Sign Up',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          )),
+                      const SizedBox(width: 35)
+                    ])
+                  : Container(),
               const SizedBox(height: 50),
-              const Text(
-                'AI-powered, evidence backed wellness directory',
-                style: TextStyle(fontSize: 20),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'AI-powered, evidence backed wellness directory',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize:
+                            MediaQuery.sizeOf(context).width >= 680 ? 20 : 18),
+                  ),
+                ),
               ),
               const SizedBox(height: 25),
               Row(
@@ -157,7 +167,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   SizedBox(
                       height: 50,
-                      width: MediaQuery.sizeOf(context).width * .6,
+                      width: MediaQuery.sizeOf(context).width >= 680
+                          ? MediaQuery.sizeOf(context).width * .6
+                          : MediaQuery.sizeOf(context).width * .85,
                       child: TextFormField(
                         controller: searchController,
                         onChanged: (value) {
