@@ -265,24 +265,26 @@ class _MyHomePageState extends State<MyHomePage> {
                                             false)
                                         ? TextButton(
                                             onPressed: () {
-                                              // launchUrl(
-                                              //     Uri.parse(document['source']));
+                                              print(document['source']);
+                                              launchUrl(
+                                                  Uri.parse(document['source']),
+                                                  webOnlyWindowName: '_blank');
                                             },
                                             style: ButtonStyle(
                                                 backgroundColor: document[
                                                             'sourceName'] ==
                                                         'Mayo Clinic'
                                                     ? MaterialStateProperty.all(
-                                                        colors[1])
+                                                        colors[0])
                                                     : document['sourceName'] ==
                                                             'Cleveland Clinic'
                                                         ? MaterialStateProperty
                                                             .all(colors[2])
                                                         : MaterialStateProperty
-                                                            .all(colors[0])),
+                                                            .all(colors[1])),
                                             child: Text(
                                               document['sourceName'],
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.black),
                                             ))
                                         : Container()
