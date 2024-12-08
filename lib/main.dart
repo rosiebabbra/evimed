@@ -3,6 +3,7 @@ import 'package:evimed/directory/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,11 +18,11 @@ void main() async {
     measurementId: const String.fromEnvironment('MEASUREMENT_ID'),
   ));
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -64,6 +65,11 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController searchController = TextEditingController();
   List<QueryDocumentSnapshot> allData = [];
   List<QueryDocumentSnapshot> filteredData = [];
+  var colors = [
+    Color.fromARGB(255, 145, 214, 236),
+    Color.fromARGB(255, 228, 167, 228),
+    Color(0xFF90EE90)
+  ];
 
   void updateResults(String query) {
     setState(() {
@@ -88,10 +94,10 @@ class _MyHomePageState extends State<MyHomePage> {
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 25.0),
+                  padding: EdgeInsets.only(left: 35.0),
                   child: Text(
                     'evimed',
-                    style: TextStyle(fontSize: 24),
+                    style: TextStyle(fontSize: 28),
                   ),
                 ),
               ),
@@ -101,25 +107,43 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: ButtonStyle(
                         foregroundColor:
                             MaterialStateProperty.all(Colors.black)),
-                    child: const Text('Home')),
+                    child: const Text(
+                      'Home',
+                      style: TextStyle(fontSize: 16),
+                    )),
                 TextButton(
                     onPressed: () {},
                     style: ButtonStyle(
                         foregroundColor:
                             MaterialStateProperty.all(Colors.black)),
-                    child: const Text('About')),
+                    child: const Text(
+                      'About',
+                      style: TextStyle(fontSize: 16),
+                    )),
                 TextButton(
                     onPressed: () {},
                     style: ButtonStyle(
                         foregroundColor:
                             MaterialStateProperty.all(Colors.black)),
-                    child: const Text('Login')),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(fontSize: 16),
+                    )),
+                const SizedBox(width: 5),
                 TextButton(
                     onPressed: () {},
                     style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            const Color.fromARGB(255, 253, 165, 195)),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.black)),
-                    child: const Text('Sign Up')),
+                    child: const Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    )),
                 const SizedBox(width: 35)
               ]),
               const SizedBox(height: 50),
@@ -133,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   SizedBox(
                       height: 50,
-                      width: 450,
+                      width: MediaQuery.sizeOf(context).width * .6,
                       child: TextFormField(
                         controller: searchController,
                         onChanged: (value) {
@@ -201,26 +225,68 @@ class _MyHomePageState extends State<MyHomePage> {
                         itemBuilder: (context, index) {
                           final document = filteredData[index];
                           return GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                '/conditionDetail/${document['condition']}',
-                                arguments: {'condition': document['condition']},
-                              );
-                            },
-                            child: SizedBox(
-                              height: 100,
-                              child: Card(
-                                surfaceTintColor: Colors.white,
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Text(
-                                    document['condition'],
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
+                            // onTap: () {
+                            //   Navigator.pushNamed(
+                            //     context,
+                            //     '/conditionDetail/${document['condition']}',
+                            //     arguments: {'condition': document['condition']},
+                            //   );
+                            // },
+                            child: Card(
+                              surfaceTintColor: Colors.white,
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SelectableText(
+                                      document['condition'],
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      ((document.data()
+                                                      as Map<String, dynamic>?)
+                                                  ?.containsKey('desc') ??
+                                              false)
+                                          ? (document.data()
+                                              as Map<String, dynamic>)['desc']
+                                          : '',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    ((document.data() as Map<String, dynamic>?)
+                                                ?.containsKey('sourceName') ??
+                                            false)
+                                        ? TextButton(
+                                            onPressed: () {
+                                              // launchUrl(
+                                              //     Uri.parse(document['source']));
+                                            },
+                                            style: ButtonStyle(
+                                                backgroundColor: document[
+                                                            'sourceName'] ==
+                                                        'Mayo Clinic'
+                                                    ? MaterialStateProperty.all(
+                                                        colors[1])
+                                                    : document['sourceName'] ==
+                                                            'Cleveland Clinic'
+                                                        ? MaterialStateProperty
+                                                            .all(colors[2])
+                                                        : MaterialStateProperty
+                                                            .all(colors[0])),
+                                            child: Text(
+                                              document['sourceName'],
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ))
+                                        : Container()
+                                  ],
                                 ),
                               ),
                             ),
