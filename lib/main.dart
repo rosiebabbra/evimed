@@ -6,17 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: "assets/.env");
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-      apiKey: dotenv.env['API_KEY']!,
-      authDomain: dotenv.env['AUTH_DOMAIN']!,
-      projectId: dotenv.env['PROJECT_ID']!,
-      storageBucket: dotenv.env['STORAGE_BUCKET']!,
-      messagingSenderId: dotenv.env['MESSAGING_SENDER_ID']!,
-      appId: dotenv.env['APP_ID']!,
-    ),
-  );
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
