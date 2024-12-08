@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,6 +63,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Mixpanel? mixpanel;
+  bool mixPanelIsLoading = true;
   TextEditingController searchController = TextEditingController();
   List<QueryDocumentSnapshot> allData = [];
   List<QueryDocumentSnapshot> filteredData = [];
@@ -70,6 +73,20 @@ class _MyHomePageState extends State<MyHomePage> {
     const Color.fromARGB(255, 228, 167, 228),
     const Color(0xFF90EE90)
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    initMixpanel();
+  }
+
+  Future<void> initMixpanel() async {
+    mixpanel = await Mixpanel.init("248788f6c59eef61f948039194eb6b07",
+        trackAutomaticEvents: true);
+    setState(() {
+      mixPanelIsLoading = false; // Mark initialization as complete
+    });
+  }
 
   void updateResults(String query) {
     setState(() {
@@ -84,6 +101,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (mixPanelIsLoading) {
+      return CircularProgressIndicator(); // Show loading UI
+    } else {
+      mixpanel!.track('Page Visit');
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -277,7 +300,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                             false)
                                         ? TextButton(
                                             onPressed: () {
-                                              print(document['source']);
+                                              mixpanel!.track(
+                                                  'Source Page Visit',
+                                                  properties: {
+                                                    'Condition Name':
+                                                        document['condition']
+                                                  });
+
                                               launchUrl(
                                                   Uri.parse(document['source']),
                                                   webOnlyWindowName: '_blank');
