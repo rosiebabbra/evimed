@@ -37,7 +37,7 @@ jobs:
           STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
           MESSAGING_SENDER_ID: ${{ secrets.MESSAGING_SENDER_ID }}
           APP_ID: ${{ secrets.APP_ID }}
-        run: flutter clean && flutter build web
+        run: flutter clean && flutter build web --dart-define=API_KEY=${{ secrets.API_KEY }} --dart-define=AUTH_DOMAIN=${{ secrets.AUTH_DOMAIN }} --dart-define=PROJECT_ID=${{ secrets.PROJECT_ID }} --dart-define=STORAGE_BUCKET=${{ secrets.STORAGE_BUCKET }} --dart-define=MESSAGING_SENDER_ID=${{ secrets.MESSAGING_SENDER_ID }} --dart-define=APP_ID=${{ secrets.APP_ID }} --dart-define=MEASUREMENT_ID=${{ secrets.MEASUREMENT_ID }}
 
       # Step 5: Deploy to Firebase Hosting
       - name: Deploy to Firebase Hosting
