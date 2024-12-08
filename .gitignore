@@ -56,3 +56,8 @@ assets/*
 
 # firebase 
 .firebase/
+
+# venv
+bin/
+lib/python3.12/
+pyvenv.cfg
