@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evimed/directory/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
@@ -91,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void updateResults(String query) {
     setState(() {
       filteredData = allData.where((element) {
-        return element['condition']
+        return element['Condition']
             .toString()
             .toLowerCase()
             .contains(query.toLowerCase());
@@ -233,7 +236,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: 500,
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection('conditions')
+                        .collection('conditions_v3')
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -260,13 +263,23 @@ class _MyHomePageState extends State<MyHomePage> {
                         itemBuilder: (context, index) {
                           final document = filteredData[index];
                           return GestureDetector(
-                            // onTap: () {
-                            //   Navigator.pushNamed(
-                            //     context,
-                            //     '/conditionDetail/${document['condition']}',
-                            //     arguments: {'condition': document['condition']},
-                            //   );
-                            // },
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext buildContext) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      content: SizedBox(
+                                        height: 500,
+                                        width: 500,
+                                        child: SelectableText(
+                                          filteredData[index]
+                                              ['Parsed_Interactions'],
+                                        ),
+                                      ),
+                                    );
+                                  });
+                            },
                             child: Card(
                               surfaceTintColor: Colors.white,
                               color: Colors.white,
@@ -276,7 +289,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     SelectableText(
-                                      document['condition'],
+                                      document['Condition'],
                                       style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w500),
@@ -304,7 +317,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   'Source Page Visit',
                                                   properties: {
                                                     'Condition Name':
-                                                        document['condition']
+                                                        document['Condition']
                                                   });
 
                                               launchUrl(
